@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/blackshane/social-network-api/issues"
   },
-  "homepage": "https://github.com/blackshane/social-network-api#readme"
+  "homepage": "https://github.com/blackshane/social-network-api#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongodb": "^5.6.0"
+  }
 }
