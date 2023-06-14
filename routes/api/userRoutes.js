@@ -1,4 +1,3 @@
-// Import required modules and models
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
@@ -6,7 +5,10 @@ const User = require('../models/User');
 // GET route for retrieving all users
 router.get('/users', async (req, res) => {
   try {
-    const users = await User.find();
+    // Use populate() to include referenced 'thoughts' and 'friends' 
+    const users = await User.find()
+      .populate('thoughts')
+      .populate('friends');
     res.json(users);
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while retrieving users' });
@@ -16,7 +18,9 @@ router.get('/users', async (req, res) => {
 // GET route for retrieving a specific user by ID
 router.get('/users/:userId', async (req, res) => {
   try {
-    const user = await User.findById(req.params.userId);
+    const user = await User.findById(req.params.userId)
+      .populate('thoughts')
+      .populate('friends');
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
@@ -59,7 +63,7 @@ router.delete('/users/:userId', async (req, res) => {
     res.json({ message: 'User deleted successfully' });
   } catch (error) {
     res.status(400).json({ error: 'Failed to delete the user' });
-}
+  }
 });
 
-module.exports = router; 
+module.exports = router;
