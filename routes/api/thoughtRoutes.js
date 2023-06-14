@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Thought = require('../models/Thought');
+const Thought = require('../../models/Thought');
 
 
 // GET route for retrieving all thoughts
@@ -84,7 +84,7 @@ router.delete('/thoughts/:thoughtId/reactions/:reactionId', async (req, res) => 
     if (!thought) {
       return res.status(404).json({ error: 'Thought not found' });
     }
-    thought.reactions.id(req.params.reactionId).remove();
+    thought.reactions.pull(req.params.reactionId);
     await thought.save();
     res.json(thought);
   } catch (error) {
