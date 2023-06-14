@@ -17,5 +17,15 @@ const userSchema = new Schema(
         thoughts: {
             
         }
+    },
+    {
+        toJSON: {
+        virtuals: true,
+      },
+        id: false,
     }
-)
+);
+
+const User = mongoose.model('User', userSchema);
+
+module.exports = User; 
