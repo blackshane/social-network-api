@@ -46,8 +46,3 @@ const userSchema = new Schema(
     
     module.exports = User;
 
-    User.create({
-      username: 'BlackTom',
-      email: 'thisIsMyEmail@email.com',
-      
-    })
