@@ -66,4 +66,49 @@ router.delete('/users/:userId', async (req, res) => {
   }
 });
 
+// POST route to add a new friend to a user's friend list
+router.post('/users/:userId/friends/:friendId', async (req, res) => {
+    try {
+      const user = await User.findById(req.params.userId);
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      const friend = await User.findById(req.params.friendId);
+      if (!friend) {
+        return res.status(404).json({ error: 'Friend not found' });
+      }
+      if (user.friends.includes(friend._id)) {
+        return res.status(400).json({ error: 'Friend already exists in user\'s friend list' });
+      }
+      user.friends.push(friend._id);
+      await user.save();
+      res.json(user);
+    } catch (error) {
+      res.status(500).json({ error: 'An error occurred while adding the friend' });
+    }
+  });
+  
+  // DELETE route to remove a friend from a user's friend list
+  router.delete('/users/:userId/friends/:friendId', async (req, res) => {
+    try {
+      const user = await User.findById(req.params.userId);
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      const friend = await User.findById(req.params.friendId);
+      if (!friend) {
+        return res.status(404).json({ error: 'Friend not found' });
+      }
+      if (!user.friends.includes(friend._id)) {
+        return res.status(400).json({ error: 'Friend does not exist in user\'s friend list' });
+      }
+      user.friends = user.friends.filter(id => id.toString() !== friend._id.toString());
+      await user.save();
+      res.json(user);
+    } catch (error) {
+      res.status(500).json({ error: 'An error occurred while removing the friend' });
+    }
+  });
+  
+
 module.exports = router;

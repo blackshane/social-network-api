@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Thought = require('../models/Thought');
 
+
 // GET route for retrieving all thoughts
 router.get('/thoughts', async (req, res) => {
   try {
