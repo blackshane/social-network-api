@@ -1,20 +1,18 @@
-const express = require('express');
-const router = express.Router();
-const { Thought } = require('../../models/');
+const Thought = require('../models/Thought');
 
-
-// GET route for retrieving all thoughts
-router.get('/thoughts', async (req, res) => {
+module.exports = {
+// Retrieve all thoughts
+async getThoughts(req, res)  {
   try {
     const thoughts = await Thought.find();
     res.json(thoughts);
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while retrieving thoughts' });
   }
-});
+},
 
-// GET route for retrieving a specific thought by ID
-router.get('/thoughts/:thoughtId', async (req, res) => {
+// Retrieve a specific thought by ID
+async getThoughtById(req, res) {
   try {
     const thought = await Thought.findById(req.params.thoughtId);
     if (!thought) {
@@ -24,20 +22,21 @@ router.get('/thoughts/:thoughtId', async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while retrieving the thought' });
   }
-});
+},
 
-// POST route for creating a new thought
-router.post('/thoughts', async (req, res) => {
+// Create a new thought
+async createNewThought(req, res) {
   try {
     const thought = await Thought.create(req.body);
+    await User.findByIdAndUpdate(req.body.userId, { $push: { thoughts: thought._id } });
     res.status(201).json(thought);
   } catch (error) {
     res.status(400).json({ error: 'Failed to create the thought' });
   }
-});
+},
 
-// PUT route for updating a thought
-router.put('/thoughts/:thoughtId', async (req, res) => {
+// Update a thought
+async updateThoughtById(req, res) {
   try {
     const thought = await Thought.findByIdAndUpdate(req.params.thoughtId, req.body, { new: true });
     if (!thought) {
@@ -47,10 +46,10 @@ router.put('/thoughts/:thoughtId', async (req, res) => {
   } catch (error) {
     res.status(400).json({ error: 'Failed to update the thought' });
   }
-});
+},
 
-// DELETE route for deleting a thought
-router.delete('/thoughts/:thoughtId', async (req, res) => {
+// Delete a thought
+async  deleteThoughtById(req, res) {
   try {
     const thought = await Thought.findByIdAndDelete(req.params.thoughtId);
     if (!thought) {
@@ -60,10 +59,10 @@ router.delete('/thoughts/:thoughtId', async (req, res) => {
   } catch (error) {
     res.status(400).json({ error: 'Failed to delete the thought' });
   }
-});
+},
 
-// POST route for creating a reaction for a thought
-router.post('/thoughts/:thoughtId/reactions', async (req, res) => {
+// Create a reaction for a thought
+async createReaction(req, res) {
   try {
     const thought = await Thought.findById(req.params.thoughtId);
     if (!thought) {
@@ -75,10 +74,10 @@ router.post('/thoughts/:thoughtId/reactions', async (req, res) => {
   } catch (error) {
     res.status(400).json({ error: 'Failed to create the reaction' });
   }
-});
+},
 
-// DELETE route for deleting a reaction from a thought
-router.delete('/thoughts/:thoughtId/reactions/:reactionId', async (req, res) => {
+// Delete a reaction from a thought
+async deleteReaction(req, res) {
   try {
     const thought = await Thought.findById(req.params.thoughtId);
     if (!thought) {
@@ -90,6 +89,5 @@ router.delete('/thoughts/:thoughtId/reactions/:reactionId', async (req, res) => 
   } catch (error) {
     res.status(400).json({ error: 'Failed to delete the reaction' });
   }
-});
-
-module.exports = router;
+},
+};

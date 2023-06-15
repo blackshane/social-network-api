@@ -1,5 +1,4 @@
-
-const { User } = require('../models');
+const User = require('../models/User');
 
 module.exports = {
 // Retrieve all users
@@ -42,7 +41,7 @@ async createUser(req, res) {
 },
 
 // Update a user
- async updateUser(req, res) {
+ async updateUserById(req, res) {
   try {
     const user = await User.findByIdAndUpdate(req.params.userId, req.body, { new: true });
     if (!user) {
@@ -55,7 +54,7 @@ async createUser(req, res) {
 },
 
 // Delete a user by id
-async deleteUser(req, res) {
+async deleteUserById(req, res) {
   try {
     const user = await User.findByIdAndDelete(req.params.userId);
     if (!user) {
