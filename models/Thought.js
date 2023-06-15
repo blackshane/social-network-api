@@ -1,10 +1,10 @@
-const { Schema, model } = require('mongoose'); 
+const { Schema, model, default: mongoose } = require('mongoose'); 
 
 const reactionSchema = new Schema(
   {
     reactionId: {
         type: Schema.Types.ObjectId,
-        default: () => new reactionSchema.Types.ObjectId()
+        default: () => new mongoose.Types.ObjectId()
       },
     reactionBody: {
       type: String,
@@ -64,5 +64,43 @@ thoughtSchema.virtual('reactionCount').get(function () {
 });
 
 const Thought = model('Thought', thoughtSchema);
+const Reaction = model('Reaction', reactionSchema)
+
+const handleError = (err) => console.error(err);
+
+Reaction
+  .create(
+    [
+        {
+        reactionBody: 'Wow! That was Great',
+        username: 'Billy-Bob_Joe-Bob',   
+    },
+        {
+        reactionBody: 'Absolutely amazing!',
+        username: 'BettyMay'
+    }
+
+]
+)
+  .then(result => console.log('Created new document', result))
+  .catch(err => handleError(err));
+
+  Thought
+  .create(
+    [
+        {
+            thoughtText: 'It is quite the sunny day',
+            username: 'Billy-Bob_Joe-Bob'
+        },
+        {
+            thoughtText: 'I hate sunny days!',
+            username: 'BettyMay'
+        }
+    ]
+  )
+  .then(result => console.log('Created new document', result))
+  .catch(err => handleError(err));
+
 
 module.exports = Thought;
+

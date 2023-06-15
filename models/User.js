@@ -43,6 +43,39 @@ const userSchema = new Schema(
     });
     
     const User = model('User', userSchema);
+
+    const handleError = (err) => console.error(err)
+
+    User.findOne({ username: 'Billy-Bob_Joe-Bob' })
+    .then(user => {
+      if (user) {
+        // Username already exists, do not create the document
+        console.log('Username already exists:', user.username);
+      } else {
+        // Username does not exist, create the document
+        User.create({ username: 'Billy-Bob_Joe-Bob', email: 'billybob@yahoo.com' })
+          .then(result => console.log('Created new document:', result))
+          .catch(err => handleError(err));
+      }
+    })
+    .catch(err => handleError(err));
+    
+  User.findOne({ username: 'BettyMay' })
+  .then(user => {
+    if (user) {
+      // Username already exists, do not create the document
+      console.log('Username already exists:', user.username);
+    } else {
+      // Username does not exist, create the document
+      User.create({ username: 'BettyMay', email: 'bettyspaghetti@yahoo.com' })
+        .then(result => console.log('Created new document:', result))
+        .catch(err => handleError(err));
+    }
+  })
+  .catch(err => handleError(err));
+
+  
+  
     
     module.exports = User;
 
