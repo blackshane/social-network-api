@@ -19,7 +19,7 @@ const reactionSchema = new Schema(
     createdAt: {
       type: Date,
       default: Date.now,
-      get: (timestamp) => dateFormat(timestamp)
+      get: (timestamp) => new Date(timestamp).toISOString(),
     }
   },
   {
@@ -41,13 +41,13 @@ const thoughtSchema = new Schema(
     createdAt: {
       type: Date,
       default: Date.now,
-      get: (timestamp) => dateFormat(timestamp)
+      get: (timestamp) => new Date(timestamp).toISOString(),
     },
     username: {
       type: String,
       required: true
     },
-    reactions: [reactionSchema]
+    reactions: [reactionSchema],
   },
   {
     toJSON: {
@@ -63,8 +63,8 @@ thoughtSchema.virtual('reactionCount').get(function () {
   return this.reactions.length;
 });
 
-const Thought = model('Thought', thoughtSchema);
-const Reaction = model('Reaction', reactionSchema)
+const Thought = model('thought', thoughtSchema);
+const Reaction = model('reaction', reactionSchema)
 
 const handleError = (err) => console.error(err);
 
