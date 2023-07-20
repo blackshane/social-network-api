@@ -9,7 +9,7 @@ const app = express();
 // Set up Express to handle data parsing
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(routes);
+app.use('/api', routes);
 
 // Start the connection
 db.once('open', () => {
